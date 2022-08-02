@@ -66,6 +66,7 @@ own         % Defines \newboolean{twocol}
 \newtheorem{assumption}{Assumption}
 \newtheorem{requirement}{Requirement}
 \newtheorem*{test*}{Test}
+\usepackage{xfrac}
 
 \graphicspath{{images/}}
 
@@ -79,8 +80,8 @@ own         % Defines \newboolean{twocol}
 \newcommand*{\metamaili}{\href{mailto:research@bobbriscoe.net}{research@bobbriscoe.net}}
 \newcommand*{\metaaddress}{}
 \newcommand*{\metatel}{Tel. +44 7718 902848}
-\newcommand*{\metaversion}{00B}
-\newcommand*{\metadate}{01 Oct 2021}
+\newcommand*{\metaversion}{00C}
+\newcommand*{\metadate}{02 Aug 2022}
 
 \hypersetup{                       % Set PDF document attributes
      pdfauthor = {\metaauthori% and \metaauthorii
@@ -161,7 +162,7 @@ own         % Defines \newboolean{twocol}
 
 %\onecolumn%
 %\clearpage
-\newpage
+%\newpage
 \addcontentsline{toc}{section}{References}
 
 %\newpage
@@ -187,7 +188,8 @@ own         % Defines \newboolean{twocol}
 Version &Date &Author &Details of change \\
  \hline\hline
 00A          &29 Sep 2021&Bob Briscoe &First draft.\\\hline%
-\metaversion &\metadate  &Bob Briscoe &Added geometric interpretation and deterministic case.\\\hline%
+00B          &01 Oct 2021  &Bob Briscoe &Added geometric interpretation and deterministic case.\\\hline%
+\metaversion &\metadate  &Bob Briscoe &Added shallow buffer case, empirical results over PIE and discussion of the applicability of the synchronized loss model. Altered analysis to use max window not min.\\\hline%
 \hline%
 \end{tabular}
 
