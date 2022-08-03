@@ -106,7 +106,7 @@ It is also interesting to note from \autoref{fig:creno-synch} that C-Reno's pack
 
 If the buffer is not deep enough to hold all the synchronized sawteeth, it will be empty during the early part of the sawteeth. Then both flows will under-perform during the early part of the cycle when C-Reno would have achieved its highest packet rate and Reno would have achieved its lowest, as shown in \autoref{fig:creno-synch-shallow}. Nonetheless, the rate of both flows reduces proportionately, so the ratio between their flow rates remains unaltered.
 
-\paragraph{Synchronized losses?} We will now question the assumption that each flow always catches at least one loss at each congestion event. We still consider two flows with equal RTTs: 1 Reno and 1 CReno. Between responses to losses, the queue grows inexorably by \((a_r + a_c \approx 1.53)\) pkt/RTT. Every time the buffer fills, one packet has to be dropped, but the queue continues to grow by 1.53 segments during the next round trip (until the resulting response reaches the queue). So it is virtually certain that another packet will have to be discarded within the same RTT as the first.
+\paragraph{Synchronized losses?} We will now question the assumption that each flow always catches at least one loss at each congestion event. We still consider two flows with equal RTTs: 1 Reno and 1 CReno. Between responses to losses, the queue grows inexorably by \((a_r + a_c \approx 1.53)\) pkt/RTT. Every time the buffer fills, one packet has to be dropped, but the queue continues to grow by 1.53 segments during the next round trip (until the resulting response reaches the queue). So it is likely that another packet will have to be discarded within the same RTT as the first.
 
 The likelihood that a particular flow catches any one of the losses depends on its packet rate relative to the other.\footnote{Irrespective of how rapidly the flow's own window is growing.}
 If the flows both have the same average window (our goal, as shown in \autoref{fig:creno-synch})
@@ -134,7 +134,7 @@ Therefore
 p_r &= 17/32 &\approx 53\%\\
 p_c &= 15/32 &\approx 47\%
 \end{align*}
-Given there are invariably two losses during each congestion event, the probabilities of each combination of two losses are:
+Then, for example, if there are two losses during a congestion event, the probabilities of each combination of two losses are:
 \begin{align*}
 p_{rr}              &= (17/32)^2               &&\approx 28\%\\
 p_{rc} \lor p_{cr}  &= 17*15/32^2 + 15*17/32^2 &&\approx 50\%\\
@@ -142,7 +142,7 @@ p_{cc}              &= (15/32)^2               &&\approx 22\%,
 \end{align*}
 where \(p_{ij}\) is the probability of a loss from flow \(i\) then \(j\).
 
-When the same flow is hit twice in the same round, it doesn't reduce any more than if it's hit once, but the other flow doesn't reduce at all. So CReno is somewhat more likely than Reno to not get hit in some rounds. In such cases, only the Reno flow would reduce, then the queue would continue to grow by \((a_r + a_c \approx 1.53)\) pkt/RTT, so the next cycle would be shorter and the CReno flow would be much more likely to be hit when it next filled the buffer --- and more likely to be hit twice.
+When there are two losses in a round and the same flow is hit twice, it doesn't reduce any more than if it's hit once, but the other flow doesn't reduce at all. So CReno is somewhat more likely than Reno to not get hit in some round. In such cases, only the Reno flow would reduce, then the queue would continue to grow by \((a_r + a_c \approx 1.53)\) pkt/RTT, so the next cycle would be shorter and the CReno flow would be much more likely to be hit when it next filled the buffer --- and more likely to be hit twice.
 
 It would be possible to calculate the average rate of each type of flow by calculating the probabilities of each chain of events programmatically. However, such precision is unnecessary. For the case of tail-drop buffers, it will be sufficient to say:
 \begin{itemize}
