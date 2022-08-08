@@ -108,8 +108,13 @@ If the buffer is not deep enough to hold all the synchronized sawteeth, it will 
 
 \paragraph{Synchronized losses?} We will now question the assumption that each flow always catches at least one loss at each congestion event. We still consider two flows with equal RTTs: 1 Reno and 1 CReno. Between responses to losses, the queue grows inexorably by \((a_r + a_c \approx 1.53)\) pkt/RTT. Every time the buffer fills, one packet has to be dropped, but the queue continues to grow by 1.53 segments during the next round trip (until the resulting response reaches the queue). So it is likely that another packet will have to be discarded within the same RTT as the first.
 
-The likelihood that a particular flow catches any one of the losses depends on its packet rate relative to the other.\footnote{Irrespective of how rapidly the flow's own window is growing.}
-If the flows both have the same average window (our goal, as shown in \autoref{fig:creno-synch})
+The likelihood that a particular flow catches any one of the losses depends on its packet rate relative to the other.\footnote{Irrespective of how rapidly the flow's own window grows.} That is,
+\begin{align}
+	\frac{p_r}{p_c} = \frac{\widehat{r_r}}{\widehat{r_c}}.\label{eqn:p_ratio1}
+\end{align}
+
+
+If the flows both have the same average window (the goal in \autoref{fig:creno-synch})
 then, by \autoref{eqn:fre} (or triangle geometry), the ratio between the packet rates of the two flows when they both reach their max is
 \begin{figure*}
 	\centering
@@ -117,18 +122,18 @@ then, by \autoref{eqn:fre} (or triangle geometry), the ratio between the packet 
 	\includegraphics[height=6.4cm]{creno-determ-time}
 	\caption{One desynchronized sawtooth cycle of C-Reno and Reno plotted wrt.\ round trips (left) and wrt.\ time (right)}\label{fig:creno-determ}
 \end{figure*}
-
 \begin{align}
 \frac{\widehat{r_r}}{\widehat{r_c}} &= \frac{(1 + b_c)}{(1 + b_r)}\notag\\
-        &= \frac{1.7}{1.5}\notag\\
-        &\approx 1.13.\label{eqn:r_ratio}
+        &= \frac{1.7}{1.5} &&\approx 1.13.\label{eqn:r_ratio}
 \end{align}
 
-When a loss occurs, from \autoref{eqn:r_ratio}, we can say that:
+When a loss occurs, from \autoref{eqn:p_ratio1} \& \autoref{eqn:r_ratio}, we can say that:
 \begin{align}
-p_r / p_c = 17/15\label{eqn:p_ratio}\\
-p_r + p_c = 1.
+	p_r / p_c = 17/15\label{eqn:p_ratio}\\
+\mathrm{and}\qquad p_r + p_c = 1,
 \end{align}
+because one or the other flow was hit with certainty.
+
 Therefore
 \begin{align*}
 p_r &= 17/32 &\approx 53\%\\
