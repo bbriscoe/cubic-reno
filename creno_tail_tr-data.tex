@@ -1,4 +1,11 @@
 % !TeX root = creno_tr.tex
 %=======================================================================================
-\section*{Acknowledgements}\label{Acks}
-The experiments in \autoref{fig:creno-v-reno-PIE} were conducted and plotted by Olga Albisser.
+%\section*{Acknowledgements}\label{Acks}
+%The experiments in \autoref{fig:creno-v-reno-PIE} were conducted and plotted by Olga Albisser.
+
+%=======================================================================================
+\section{Conclusion}\label{Conclusion}
+
+In the simulations using the RED AQM in Floyd's report~\cite{Floyd00:Eqn_v_AIMD_cc}, CReno throughput was 70\% of that of competing Reno flows when C-Reno used \(b_c=7/8\) and \(a_c\) was set according to  \autoref{eqn:reno-friendly}. No-one has been able to explain those results. 
+
+Nonetheless, the present report shows that, with the widely deployed decrease factor of \(b_c=0.7\), the Reno-Friendly mode in CUBIC is sufficiently well modelled by \autoref{eqn:reno-friendly} that the Additive Increase factor it produces (\(a_c = 0.53\)) ensures that TCP CUBIC competes roughly equally with Reno across its intended operating range whether with a tail-drop queue or a single-queue AQM (PIE) at the bottleneck.

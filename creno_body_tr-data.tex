@@ -98,7 +98,9 @@ Plugging in Reno's AIMD factors, \(a_r=1, b_r=1/2\):
                     &\approx 0.53.
 \end{align*}
 
-\paragraph{Geometric interpretation:} \autoref{fig:creno-synch} shows one flow each of C-Reno and Reno competing over one synchronized sawtooth cycle. Superficially, the whole derivation of \(a_c\) above can be derived from simple triangle geometry, by drawing congestion window sawteeth that increase linearly wrt.\ round trips (mid-left) then setting the mid-points of the two ramps to the same height. Then \autoref{eqn:fre} gives the ratio between the heights of the bases of the triangles, and \autoref{eqn:friendly} gives the ratio of the heights of the triangles themselves.
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsubsection{Geometric interpretation} 
+\autoref{fig:creno-synch} shows one flow each of C-Reno and Reno competing over one synchronized sawtooth cycle. Superficially, the whole derivation of \(a_c\) above can be derived from simple triangle geometry, by drawing congestion window sawteeth that increase linearly wrt.\ round trips (mid-left) then setting the mid-points of the two ramps to the same height. Then \autoref{eqn:fre} gives the ratio between the heights of the bases of the triangles, and \autoref{eqn:friendly} gives the ratio of the heights of the triangles themselves.
 
 However, it is not enough to merely assert that the average heights of these sawteeth are equal, as \cite{Floyd00:Eqn_v_AIMD_cc} does. Strictly, it is necessary to start from the goal of equal flow rates averaged over time, as the above analysis does. Given RTT grows throughout the cycle, the plots of flow-rate against time (top right in \autoref{fig:creno-synch}) stretch out more to the right, forming concave curves. It is not at all obvious how to equate the averages of these two curves until they are weighted by round trip duration, which transforms them into the linear plots of window wrt.\ rounds (mid-left), as in \autoref{eqn:cwnd_equality}.
 
@@ -106,7 +108,9 @@ It is also interesting to note from \autoref{fig:creno-synch} that C-Reno's pack
 
 If the buffer is not deep enough to hold all the synchronized sawteeth, it will be empty during the early part of the sawteeth. Then both flows will under-perform during the early part of the cycle when C-Reno would have achieved its highest packet rate and Reno would have achieved its lowest, as shown in \autoref{fig:creno-synch-shallow}. Nonetheless, the rate of both flows reduces proportionately, so the ratio between their flow rates remains unaltered.
 
-\paragraph{Synchronized losses?} We will now question the assumption that each flow always catches at least one loss at each congestion event. We still consider two flows with equal RTTs: 1 Reno and 1 CReno. Between responses to losses, the queue grows inexorably by \((a_r + a_c \approx 1.53)\) pkt/RTT. Every time the buffer fills, one packet has to be dropped, but the queue continues to grow by 1.53 segments during the next round trip (until the resulting response reaches the queue). So it is likely that another packet will have to be discarded within the same RTT as the first.
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsubsection{Synchronized losses?}
+We will now question the assumption that each flow always catches at least one loss at each congestion event. We still consider two flows with equal RTTs: 1 Reno and 1 CReno. Between responses to losses, the queue grows inexorably by \((a_r + a_c \approx 1.53)\) pkt/RTT. Every time the buffer fills, one packet has to be dropped, but the queue continues to grow by 1.53 segments during the next round trip (until the resulting response reaches the queue). So it is likely that another packet will have to be discarded within the same RTT as the first.
 
 The likelihood that a particular flow catches any one of the losses depends on its packet rate relative to the other.\footnote{Irrespective of how rapidly the flow's own window grows.} That is,
 \begin{align}
@@ -156,6 +160,17 @@ It would be possible to calculate the average rate of each type of flow by calcu
 \end{itemize}
 Here, ``slightly''  means roughly within a 10\% margin of error.
 
+
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsubsection{Empirical Results: Tail Drop}\label{empirical-pfifo}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{ts_1-1_erpfifo}
+	\caption{AQM: none (PFIFO.)}\label{fig:ts_1-1_erpfifo}
+\end{figure}
+
+
 % ----------------------------------------------------------------
 \subsection{Desynchronized (AQM) Case}\label{AQM}
 
@@ -170,16 +185,26 @@ If we assumed it was, we would end up with \autoref{eqn:reno-friendly} for C-Ren
 
 However, although \autoref{fig:creno-determ} shows the sawtooth reductions alternating Reno -- C-Reno -- Reno, this need not be the case. In the cycle after 400\,ms in the top-right plot, the ratio between C-Reno's and Reno's packet rates is about 51:49. So it is nearly as likely that the AQM will hit a Reno packet as a C-Reno packet, causing Reno to reduce twice in a row. If the AQM did hit C-Reno around 400\,ms, at around 600\,ms the ratio would be about 42:58, making Reno more likely to be hit. Overall, if \(a_c\) is set as for the synchronized case (\autoref{eqn:reno-friendly}), an AQM is likely to hit Reno somewhat more often than C-Reno.
 
+% - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+\subsubsection{Empirical Results: PIE AQM}
+\begin{figure}
+	\centering
+	\includegraphics[width=\linewidth]{ts_1-1_erpie}
+	\caption{AQM: PIE.}\label{fig:ts_1-1_erpie}
+\end{figure}
+
 \begin{figure}
 	\centering
 	\includegraphics[width=\linewidth]{ts_link40_rtt10_reno-PIE}
 	\caption{AQM: PIE; link capacity: 40\,Mb/s; Base RTT: 10\,ms.}\label{fig:creno-v-reno-PIE}
 \end{figure}
-\paragraph{Empirical Results:} Lon-running CReno flows with \(b_c = 0.7\) and AI factor \(a_c=1.53\) were tested against Reno over a path with base RTT 10\,ms containing a PIE AQM at the 40\,Mb/s bottleneck. Various combinations of numbers of each flow type were used, as shown along the \(x\)-axis of \autoref{fig:creno-v-reno-PIE}. For instance, in the top plot, A2-B8 means 2 ECN-CUBIC flows vs. 8 (non-ECN) CUBIC flows. And in the bottom plot it means 2 ECN-CUBIC flows vs. 8 (non-ECN) Reno flows.\footnote{In each run flow rate measurement was delayed until the flows had converged, then taken every second for 250\,s. The resulting 250 measurements were analysed to calculate the percentiles. The two types of flow were sent from two sendering hosts to two receiving hosts via a bridge and a bottleneck AQM node. All machines were running Linux kernel v5.10.31. All CCs and AQMs were configured with default parameters.}
 
-The whisker plots show 1\textsuperscript{st} \%-ile (P1), mean and 99\textsuperscript{th} \%-ile (P99) normalized flow rate. Normalized flow rate is defined as the flow rate relative to \(\sfrac{1}{N}\) of the capacity, where \(N\) is the total number of flows.
+A single long-running CReno flow with \(b_c = 0.7\) and AI factor \(a_c=1.53\) was tested against a single Reno flow over a PIE AQM at the bottleneck of a range of 25 different paths with five different link rates and five different RTTs, as shown on the \(x\)-axis of \autoref{ts_1-1_erpie}.\footnote{In each run flow rate measurement was delayed until the flows had converged, then taken every second for 250\,s. The resulting 250 measurements were analysed to calculate the percentiles. The two types of flow were sent from two sendering hosts to two receiving hosts via a bridge and a bottleneck AQM node. All machines were running Linux kernel v5.10.31. All CCs and AQMs were configured with default parameters.} Also, various combinations of numbers of each flow type were tested, as shown along the \(x\)-axis of \autoref{fig:creno-v-reno-PIE}. For instance, in the top plot of \autoref{fig:creno-v-reno-PIE}, A2-B8 means 2 ECN-CUBIC flows vs.\ 8 (non-ECN) CUBIC flows. And in the bottom plot it means 2 ECN-CUBIC flows vs. 8 (non-ECN) Reno flows. All the different combinations of flow numbers were run over a path with base RTT 10\,ms at the 40\,Mb/s bottleneck, which was chosen to have low enough BDP for CUBIC to remain in its Reno-friendly mode. 
 
-It can be seen that CReno seems to be slightly less aggressive than Reno under these conditions. However, the discrepancy is hardly visible, and more than an order of magnitude smaller than the range of the ratio's natural variability between its P1 and P99.
+In all cases the results are shown as whisker plots that show 1\textsuperscript{st} \%-ile (P1), mean and 99\textsuperscript{th} \%-ile (P99) normalized flow rate. Normalized flow rate is defined as the flow rate relative to \(\sfrac{1}{N}\) of the capacity, where \(N\) is the total number of flows.
 
-In the simulations using the RED AQM in Floyd's report~\cite{Floyd00:Eqn_v_AIMD_cc}, CReno throughput was 70\% of that of competing Reno flows when C-Reno used \(b_c=7/8\) and \(a_c\) was set according to  \autoref{eqn:reno-friendly}. No-one has been able to explain those results. However, the present report shows that \autoref{eqn:reno-friendly} is at least sufficient for the Reno-Friendly algorithm in CUBIC with the widely deployed decrease factor of \(b_c=0.7\).
+In the 1 vs.\ 1 tests (\autoref{ts_1-1_erpie}), it can be seen that CReno and Reno share the bandwidth roughly equally except for cases with higher BDP. Thus, although an analytical model of CUBIC's Reno-friendly mode has not been produced for the AQM case, the empirical results show that, at least in Reno-friendly mode, CUBIC's rate is indeed equivalent to Reno's. As BDP increases, CUBIC can be seen to start taking a greater share of capacity, as it increasingly operates beyond its Reno-friendly mode (outside the scope of this paper, which focuses on AIMD). 
+
+In the multi-flow tests (\autoref{fig:creno-v-reno-PIE}), it can be seen that CReno seems to be slightly less aggressive than Reno. However, the discrepancy is hardly visible, and more than an order of magnitude smaller than the range of the ratio's natural variability between its P1 and P99.
+
 
