@@ -120,12 +120,6 @@ The likelihood that a particular flow catches any one of the losses depends on i
 
 If the flows both have the same average window (the goal in \autoref{fig:creno-synch})
 then, by \autoref{eqn:fre} (or triangle geometry), the ratio between the packet rates of the two flows when they both reach their max is
-\begin{figure*}
-	\centering
-	\includegraphics[height=6.4cm]{creno-determ-round}
-	\includegraphics[height=6.4cm]{creno-determ-time}
-	\caption{One desynchronized sawtooth cycle of C-Reno and Reno plotted wrt.\ round trips (left) and wrt.\ time (right)}\label{fig:creno-determ}
-\end{figure*}
 \begin{align}
 \frac{\widehat{r_r}}{\widehat{r_c}} &= \frac{(1 + b_c)}{(1 + b_r)}\notag\\
         &= \frac{1.7}{1.5} &&\approx 1.13.\label{eqn:r_ratio}
@@ -170,7 +164,14 @@ Here, ``slightly''  means roughly within a 10\% margin of error.
 	\caption{AQM: none (PFIFO.)}\label{fig:ts_1-1_erpfifo}
 \end{figure}
 
+\bob{TBA}
 
+\begin{figure*}
+	\centering
+	\includegraphics[height=6.4cm]{creno-determ-round}
+	\includegraphics[height=6.4cm]{creno-determ-time}
+	\caption{One desynchronized sawtooth cycle of C-Reno and Reno plotted wrt.\ round trips (left) and wrt.\ time (right)}\label{fig:creno-determ}
+\end{figure*}
 % ----------------------------------------------------------------
 \subsection{Desynchronized (AQM) Case}\label{AQM}
 
@@ -199,12 +200,14 @@ However, although \autoref{fig:creno-determ} shows the sawtooth reductions alter
 	\caption{AQM: PIE; link capacity: 40\,Mb/s; Base RTT: 10\,ms.}\label{fig:creno-v-reno-PIE}
 \end{figure}
 
-A single long-running CReno flow with \(b_c = 0.7\) and AI factor \(a_c=1.53\) was tested against a single Reno flow over a PIE AQM at the bottleneck of a range of 25 different paths with five different link rates and five different RTTs, as shown on the \(x\)-axis of \autoref{ts_1-1_erpie}.\footnote{In each run flow rate measurement was delayed until the flows had converged, then taken every second for 250\,s. The resulting 250 measurements were analysed to calculate the percentiles. The two types of flow were sent from two sendering hosts to two receiving hosts via a bridge and a bottleneck AQM node. All machines were running Linux kernel v5.10.31. All CCs and AQMs were configured with default parameters.} Also, various combinations of numbers of each flow type were tested, as shown along the \(x\)-axis of \autoref{fig:creno-v-reno-PIE}. For instance, in the top plot of \autoref{fig:creno-v-reno-PIE}, A2-B8 means 2 ECN-CUBIC flows vs.\ 8 (non-ECN) CUBIC flows. And in the bottom plot it means 2 ECN-CUBIC flows vs. 8 (non-ECN) Reno flows. All the different combinations of flow numbers were run over a path with base RTT 10\,ms at the 40\,Mb/s bottleneck, which was chosen to have low enough BDP for CUBIC to remain in its Reno-friendly mode. 
+A single long-running CReno flow with \(b_c = 0.7\) and AI factor \(a_c=1.53\) was tested against a single Reno flow over a PIE AQM at the bottleneck of a range of 25 different paths with five different link rates and five different RTTs, as shown on the \(x\)-axis of \autoref{ts_1-1_erpie}.\footnote{In each run flow rate measurement was delayed until the flows had converged, then taken every second for 250\,s. The resulting 250 measurements were analysed to calculate the percentiles. The two types of flow were sent from two sending hosts to two receiving hosts via a bridge and a bottleneck AQM node. All machines were running Linux kernel v5.10.31. All CCs and AQMs were configured with default parameters.} Also, various combinations of numbers of each flow type were tested, as shown along the \(x\)-axis of \autoref{fig:creno-v-reno-PIE}. For instance, in the top plot of \autoref{fig:creno-v-reno-PIE}, A2-B8 means 2 ECN-CUBIC flows vs.\ 8 (non-ECN) CUBIC flows. And in the bottom plot it means 2 ECN-CUBIC flows vs. 8 (non-ECN) Reno flows. All the different combinations of flow numbers were run over a path with base RTT 10\,ms at the 40\,Mb/s bottleneck, which was chosen to have low enough BDP for CUBIC to remain in its Reno-friendly mode. 
 
 In all cases the results are shown as whisker plots that show 1\textsuperscript{st} \%-ile (P1), mean and 99\textsuperscript{th} \%-ile (P99) normalized flow rate. Normalized flow rate is defined as the flow rate relative to \(\sfrac{1}{N}\) of the capacity, where \(N\) is the total number of flows.
 
-In the 1 vs.\ 1 tests (\autoref{ts_1-1_erpie}), it can be seen that CReno and Reno share the bandwidth roughly equally except for cases with higher BDP. Thus, although an analytical model of CUBIC's Reno-friendly mode has not been produced for the AQM case, the empirical results show that, at least in Reno-friendly mode, CUBIC's rate is indeed equivalent to Reno's. As BDP increases, CUBIC can be seen to start taking a greater share of capacity, as it increasingly operates beyond its Reno-friendly mode (outside the scope of this paper, which focuses on AIMD). 
+In the 1 vs.\ 1 tests (\autoref{ts_1-1_erpie}), it can be seen that CReno and Reno share the bandwidth roughly equally except for cases with higher BDP. Thus, although an analytical model of CUBIC's Reno-friendly mode has not been produced for the AQM case, the empirical results show that, at least in Reno-friendly mode, CUBIC's rate is indeed equivalent to Reno's.
 
-In the multi-flow tests (\autoref{fig:creno-v-reno-PIE}), it can be seen that CReno seems to be slightly less aggressive than Reno. However, the discrepancy is hardly visible, and more than an order of magnitude smaller than the range of the ratio's natural variability between its P1 and P99.
+As BDP increases, CUBIC can be seen to start taking a greater share of capacity, as it increasingly operates beyond its Reno-friendly mode. The switch-over value closely matches that predicted from equation (6) in \cite{Briscoe21c:pi2param} with 10\,ms added to the base RTT for the average height of the sawtooth against PIE's target queue (as explained in \S\,3.4 and plotted in Figure 5, both referring to that paper).\footnote{Further discussion of pure CUBIC mode is outside the scope of the present paper, which focuses on AIMD.}
+
+In the multi-flow tests over the PIE AQM (\autoref{fig:creno-v-reno-PIE}), it can be seen that CReno gives roughly the same rate as Reno over the full range of tests. Indeed, if anything, CReno seems to be slightly less aggressive than Reno. However, the discrepancy is hardly visible, and more than an order of magnitude smaller than the range of the ratio's natural variability between its P1 and P99. Note that in this test the BDP is always low enough to keep TCP CUBIC in its Reno-friendly mode.
 
 
