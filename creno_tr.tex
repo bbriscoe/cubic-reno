@@ -82,8 +82,8 @@ own         % Defines \newboolean{twocol}
 \newcommand*{\metamailii}{\href{mailto:olga@albisser.org}{olga@albisser.org}}
 \newcommand*{\metaaddress}{}
 \newcommand*{\metatel}{Tel. +44 7718 902848}
-\newcommand*{\metaversion}{00D}
-\newcommand*{\metadate}{08 Aug 2022}
+\newcommand*{\metaversion}{00E}
+\newcommand*{\metadate}{16 Mar 2023}
 
 \hypersetup{                       % Set PDF document attributes
      pdfauthor = {\metaauthori and \metaauthorii
@@ -109,7 +109,7 @@ own         % Defines \newboolean{twocol}
 \fancyhf{}%
 \fancyhead[LO,RE]{\metashorttitle}%
 \fancyhead[LE,RO]{\metano}%
-\fancyfoot[LO,RE]{\scriptsize{\copyright~bobbriscoe.net Ltd, 2021}}%
+\fancyfoot[LO,RE]{\scriptsize{\copyright~bobbriscoe.net Ltd, 2021-23}}%
 %\fancyfoot[LO,RE]{}%
 \cfoot{\footnotesize{\scriptsize{Version~\metaversion}}}%
 \fancyfoot[RO,LE]{\scriptsize{\thepage~of~\pageref{LastPage}}}%
@@ -164,7 +164,7 @@ own         % Defines \newboolean{twocol}
 
 %\onecolumn%
 %\clearpage
-%\newpage
+\newpage
 \addcontentsline{toc}{section}{References}
 
 %\newpage
@@ -192,7 +192,8 @@ Version &Date &Author &Details of change \\
 00A          &29 Sep 2021&Bob Briscoe &First draft.\\\hline%
 00B          &01 Oct 2021  &Bob Briscoe &Added geometric interpretation and deterministic case.\\\hline%
 00C          &03 Aug 2022  &Bob Briscoe &Added shallow buffer case, empirical results over PIE and discussion of the applicability of the synchronized loss model. Added Acks section. Altered analysis to use max window not min.\\\hline%
-\metaversion &\metadate  &Bob Briscoe &Added explicit step at \autoref{eqn:p_ratio1} that was previously implicit.\\\hline%
+00D          &08 Aug 2022  &Bob Briscoe &Added explicit step at \autoref{eqn:p_ratio1} that was previously implicit.\\\hline%
+\metaversion &\metadate  &Bob Briscoe &Added text around results in \S\,\ref{empirical-pfifo}. Improvements throughout. Expanded conclusions.\\\hline%
 \hline%
 \end{tabular}
 

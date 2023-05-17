@@ -6,6 +6,15 @@
 %=======================================================================================
 \section{Conclusion}\label{Conclusion}
 
-In the simulations using the RED AQM in Floyd's report~\cite{Floyd00:Eqn_v_AIMD_cc}, CReno throughput was 70\% of that of competing Reno flows when C-Reno used \(b_c=7/8\) and \(a_c\) was set according to  \autoref{eqn:reno-friendly}. No-one has been able to explain those results. 
+This report provides:
+\begin{itemize}[nosep]
+	\item a formula (\autoref{eqn:reno-friendly}) for the additive increase parameter of an AIMD algorithm as a function of its chosen multiplicative decrease factor that should maintain an equal flow rate with another AIMD flow, specifically a Reno flow. 
+	
+	\item a derivation of the formula that relies on fewer assumptions and is more rigorous than that in Floyd \emph{et al}~\cite{Floyd00:Eqn_v_AIMD_cc}. It applies to tail drop buffers whereas that in Floyd \emph{et al} relied on an AQM with deterministic marking. Nonetheless the formula turns out to be the same.
+	
+	\item a testbed validation of the formula (at least for the case where the MD factor is 0.7) over a range of 25 different path characteristics (5 rates and 5 base RTTs) with a tail-drop bottleneck buffer.
+	
+	\item a testbed evaluation of the formula over the same range of scenarios but with a PIE AQM at the bottleneck. This shows that the AI factor works correctly over a PIE AQM, even though it was derived assuming tail-drop.
+\end{itemize}
 
-Nonetheless, the present report shows that, with the widely deployed decrease factor of \(b_c=0.7\), the Reno-Friendly mode in CUBIC is sufficiently well modelled by \autoref{eqn:reno-friendly} that the Additive Increase factor it produces (\(a_c = 0.53\)) ensures that TCP CUBIC competes roughly equally with Reno across its intended operating range whether with a tail-drop queue or a single-queue AQM (PIE) at the bottleneck.
+These result show that, with the widely deployed decrease factor of \(b_c=0.7\), the Reno-Friendly mode in CUBIC is sufficiently well modelled by \autoref{eqn:reno-friendly} that the Additive Increase factor it produces (\(a_c = 0.53\)) ensures that TCP CUBIC competes roughly equally with Reno across its intended operating range, whether with a tail-drop queue or a single-queue AQM (PIE) at the bottleneck.
